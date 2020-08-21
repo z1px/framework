@@ -28,16 +28,28 @@ func New() (validate *validator.Validate, trans ut.Translator, err error) {
 	if err != nil {
 		return
 	}
-	// 自定义错误内容
-	registerFn := func(ut ut.Translator) (err error) {
+	// 自定义mobile错误内容
+	registerMobileFn := func(ut ut.Translator) (err error) {
+		err = ut.Add("mobile", "手机号格式错误!", true) // see universal-translator for details
+		return
+	}
+	translationMobileFn := func(ut ut.Translator, fe validator.FieldError) (t string) {
+		t, _ = ut.T("mobile", fe.Field())
+		return
+	}
+	if err = validate.RegisterTranslation("mobile", trans, registerMobileFn, translationMobileFn); err != nil {
+		return
+	}
+	// 自定义empty错误内容
+	registerEmptyFn := func(ut ut.Translator) (err error) {
 		err = ut.Add("empty", "{0} 必须为空!", true) // see universal-translator for details
 		return
 	}
-	translationFn := func(ut ut.Translator, fe validator.FieldError) (t string) {
+	translationEmptyFn := func(ut ut.Translator, fe validator.FieldError) (t string) {
 		t, _ = ut.T("empty", fe.Field())
 		return
 	}
-	if err = validate.RegisterTranslation("empty", trans, registerFn, translationFn); err != nil {
+	if err = validate.RegisterTranslation("empty", trans, registerEmptyFn, translationEmptyFn); err != nil {
 		return
 	}
 	//验证器注册翻译器
