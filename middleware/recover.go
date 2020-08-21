@@ -18,9 +18,9 @@ func Recover() gin.HandlerFunc {
 			if r := recover(); r != nil {
 				logs.ErrPrintln("recover：", r)
 				c.JSON(http.StatusBadGateway, gin.H{
-					"Code": 0,
-					"Msg": r.(string),
-					"Data": make(map[string]interface{}),
+					"code":      0,
+					"msg":       r.(string),
+					"data":      make(map[string]interface{}),
 					"timestamp": time.Now().Unix(),
 				})
 			}
