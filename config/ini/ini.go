@@ -19,7 +19,7 @@ func Init() {
 	if filepath.IsExist(filename) {
 		if cfg, err := ini.Load(filename); err != nil {
 			// handle error
-			log.Fatal(err)
+			log.Fatalln(err)
 		} else {
 			config.IniConf = cfg
 		}

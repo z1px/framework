@@ -35,6 +35,7 @@ func Init() {
 	}
 	// 设置输出数据库日志
 	db.LogMode(conf.Debug)
+	db.SetLogger(gorm.Logger{LogWriter: NewLog()})
 	// 全局禁用表名复数
 	db.SingularTable(true) // 如果设置为true,`User`的默认表名为`user`,使用`TableName`设置的表名不受影响
 	// 更改默认表名，设置数据库表前缀

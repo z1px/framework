@@ -37,14 +37,14 @@ func Logger() gin.HandlerFunc {
 			time.Now().Minute(),
 			time.Now().Second())))
 		if err != nil {
-			log.Fatal("err", err)
+			log.Fatalln("Failed to rename error logger file：", err)
 		}
 	}
 
 	// 记录到文件
 	fp, err := os.OpenFile(logFile, os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0666)
 	if err != nil {
-		log.Fatal("err", err)
+		log.Fatalln("Failed to open error logger file：", err)
 	}
 	// 同时将日志写入文件和控制台
 	gin.DefaultWriter = io.MultiWriter(fp, os.Stdout)
@@ -54,7 +54,7 @@ func Logger() gin.HandlerFunc {
 	// 错误日志记录到文件
 	_fp, _err := os.OpenFile(errorFile, os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0666)
 	if _err != nil {
-		log.Fatal("_err", _err)
+		log.Fatalln("Failed to open error logger file：", _err)
 	}
 	gin.DefaultErrorWriter = io.MultiWriter(_fp, os.Stderr)
 
@@ -92,9 +92,9 @@ func LoggerToFile() gin.HandlerFunc {
 	// 日志文件存在放目录
 	logPath, _ := filepath.GetLogPath()
 	// 日志文件完整路径
-	fileName := path.Join(logPath, "logger.log")
+	logFile := path.Join(logPath, "logger.log")
 	// 写入文件
-	fp, _ := os.OpenFile(fileName, os.O_APPEND|os.O_WRONLY, os.ModeAppend)
+	fp, _ := os.OpenFile(logFile, os.O_APPEND|os.O_WRONLY, os.ModeAppend)
 
 	// 实例化
 	Log := logrus.New()
@@ -113,16 +113,16 @@ func LoggerToFile() gin.HandlerFunc {
 	// 设置 rotatelogs
 	logWriter, err := rotateLogs.New(
 		// 分割后的文件名称
-		strings.TrimSuffix(fileName, "log")+"%Y%m%d.log",
+		strings.TrimSuffix(logFile, "log")+"%Y%m%d.log",
 		// 生成软链，指向最新日志文件
-		rotateLogs.WithLinkName(fileName),
+		rotateLogs.WithLinkName(logFile),
 		// 设置最大保存时间(7天)
 		rotateLogs.WithMaxAge(7*24*time.Hour),
 		// 设置日志切割时间间隔(1天)
 		rotateLogs.WithRotationTime(24*time.Hour),
 	)
 	if err != nil {
-		log.Fatal("err", err)
+		log.Fatalln("err：", err)
 	}
 
 	writeMap := lfshook.WriterMap{

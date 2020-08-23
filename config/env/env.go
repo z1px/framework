@@ -13,7 +13,7 @@ func Init() {
 	// 读取配置
 	if err := godotenv.Load(); err != nil {
 		// handle error
-		log.Fatal(err)
+		log.Fatalln(err)
 	}
 }
 

@@ -32,7 +32,7 @@ func LoadConfToml() {
 	if filepath.IsExist(filename) {
 		if _, err := toml.DecodeFile(filename, &config.TomlConf); err != nil {
 			// handle error
-			log.Fatal(err)
+			log.Fatalln(err)
 		}
 	}
 }
@@ -47,7 +47,7 @@ func LoadDatabaseToml() {
 	if filepath.IsExist(filename) {
 		if _, err := toml.DecodeFile(filename, &config.DBConf); err != nil {
 			// handle error
-			log.Fatal(err)
+			log.Fatalln(err)
 		}
 	}
 }
