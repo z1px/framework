@@ -1,6 +1,7 @@
 package ip
 
 import (
+	"fmt"
 	"github.com/ipipdotnet/ipdb-go"
 	"github.com/z1px/framework/logs"
 	"github.com/z1px/framework/util/filepath"
@@ -21,15 +22,25 @@ func Init() {
 	InitBaseStation()
 }
 
-// 初始化连接
-func InitCity() {
+// 获取IP库文件地址
+func getFilename() (filename string, err error) {
 	// 获取配置文件夹完整路径
 	confPath, _ := filepath.GetConfPath()
 	// IP库文件完整路径
-	filename := path.Join(confPath, "city.ipv4.ipdb")
+	filename = path.Join(confPath, "city.ipv4.ipdb")
 	// 判断IP库文件是否存在
 	if !filepath.IsExist(filename) {
-		logs.ErrPrintf("IP库文件不存在，文件地址：%s\n", filename)
+		err = fmt.Errorf("IP库文件不存在，文件地址：%s\n", filename)
+	}
+	return
+}
+
+// 初始化连接
+func InitCity() {
+	// 获取IP库文件地址
+	filename, err := getFilename()
+	if err != nil {
+		logs.ErrPrintln(err)
 	}
 	db, err := ipdb.NewCity(filename)
 	if err != nil {
@@ -41,13 +52,10 @@ func InitCity() {
 }
 
 func InitBaseStation() {
-	// 获取配置文件夹完整路径
-	confPath, _ := filepath.GetConfPath()
-	// IP库文件完整路径
-	filename := path.Join(confPath, "city.ipv4.ipdb")
-	// 判断IP库文件是否存在
-	if !filepath.IsExist(filename) {
-		logs.ErrPrintf("IP库文件不存在，文件地址：%s\n", filename)
+	// 获取IP库文件地址
+	filename, err := getFilename()
+	if err != nil {
+		logs.ErrPrintln(err)
 	}
 	db, err := ipdb.NewBaseStation(filename)
 	if err != nil {
@@ -59,13 +67,10 @@ func InitBaseStation() {
 }
 
 func InitIDC() {
-	// 获取配置文件夹完整路径
-	confPath, _ := filepath.GetConfPath()
-	// IP库文件完整路径
-	filename := path.Join(confPath, "city.ipv4.ipdb")
-	// 判断IP库文件是否存在
-	if !filepath.IsExist(filename) {
-		logs.ErrPrintf("IP库文件不存在，文件地址：%s\n", filename)
+	// 获取IP库文件地址
+	filename, err := getFilename()
+	if err != nil {
+		logs.ErrPrintln(err)
 	}
 	db, err := ipdb.NewIDC(filename)
 	if err != nil {
@@ -77,12 +82,10 @@ func InitIDC() {
 }
 
 func InitDistrict() { // 获取配置文件夹完整路径
-	confPath, _ := filepath.GetConfPath()
-	// IP库文件完整路径
-	filename := path.Join(confPath, "city.ipv4.ipdb")
-	// 判断IP库文件是否存在
-	if !filepath.IsExist(filename) {
-		logs.ErrPrintf("IP库文件不存在，文件地址：%s\n", filename)
+	// 获取IP库文件地址
+	filename, err := getFilename()
+	if err != nil {
+		logs.ErrPrintln(err)
 	}
 	db, err := ipdb.NewDistrict(filename)
 	if err != nil {
@@ -95,12 +98,9 @@ func InitDistrict() { // 获取配置文件夹完整路径
 
 // 重新加载内容
 func ReloadCity() {
-	// 获取配置文件夹完整路径
-	confPath, _ := filepath.GetConfPath()
-	// IP库文件完整路径
-	filename := path.Join(confPath, "city.ipv4.ipdb")
-	// 判断IP库文件是否存在
-	if filepath.IsExist(filename) {
+	// 获取IP库文件地址
+	filename, err := getFilename()
+	if err == nil {
 		// 更新 ipdb 文件后可调用 Reload 方法重新加载内容
 		if err := City.Reload(filename); err != nil {
 			logs.ErrPrintln(err)
@@ -109,12 +109,9 @@ func ReloadCity() {
 }
 
 func ReloadBaseStation() {
-	// 获取配置文件夹完整路径
-	confPath, _ := filepath.GetConfPath()
-	// IP库文件完整路径
-	filename := path.Join(confPath, "city.ipv4.ipdb")
-	// 判断IP库文件是否存在
-	if filepath.IsExist(filename) {
+	// 获取IP库文件地址
+	filename, err := getFilename()
+	if err == nil {
 		// 更新 ipdb 文件后可调用 Reload 方法重新加载内容
 		if err := BaseStation.Reload(filename); err != nil {
 			logs.ErrPrintln(err)
@@ -123,12 +120,9 @@ func ReloadBaseStation() {
 }
 
 func ReloadIDC() {
-	// 获取配置文件夹完整路径
-	confPath, _ := filepath.GetConfPath()
-	// IP库文件完整路径
-	filename := path.Join(confPath, "city.ipv4.ipdb")
-	// 判断IP库文件是否存在
-	if filepath.IsExist(filename) {
+	// 获取IP库文件地址
+	filename, err := getFilename()
+	if err == nil {
 		// 更新 ipdb 文件后可调用 Reload 方法重新加载内容
 		if err := IDC.Reload(filename); err != nil {
 			logs.ErrPrintln(err)
@@ -137,12 +131,9 @@ func ReloadIDC() {
 }
 
 func ReloadDistrict() {
-	// 获取配置文件夹完整路径
-	confPath, _ := filepath.GetConfPath()
-	// IP库文件完整路径
-	filename := path.Join(confPath, "city.ipv4.ipdb")
-	// 判断IP库文件是否存在
-	if filepath.IsExist(filename) {
+	// 获取IP库文件地址
+	filename, err := getFilename()
+	if err == nil {
 		// 更新 ipdb 文件后可调用 Reload 方法重新加载内容
 		if err := District.Reload(filename); err != nil {
 			logs.ErrPrintln(err)
