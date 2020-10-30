@@ -3,7 +3,7 @@ package framework
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"github.com/z1px/framework/config"
+	"github.com/z1px/framework/conf"
 	_ "github.com/z1px/framework/db/ip"
 	"github.com/z1px/framework/db/mysql"
 	"github.com/z1px/framework/db/redis"
@@ -17,10 +17,10 @@ import (
 // 初始化
 func Init() (engine *gin.Engine) {
 	// 初始化配置文件
-	config.Init()
+	conf.Init()
 
 	// 设置运行模式
-	gin.SetMode(config.GetMode())
+	gin.SetMode(conf.GetMode())
 
 	// 新建一个没有任何默认中间件的路由
 	engine = gin.New()
@@ -50,7 +50,7 @@ func Init() (engine *gin.Engine) {
 func Run(engine *gin.Engine) {
 
 	// 监听地址
-	address := fmt.Sprintf("%s:%d", config.BaseConf.Server.Host, config.BaseConf.Server.Port)
+	address := fmt.Sprintf("%s:%d", conf.Base.Server.Host, conf.Base.Server.Port)
 
 	logs.Printf("listen：%s\n", address)
 

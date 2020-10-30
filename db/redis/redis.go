@@ -3,7 +3,7 @@ package redis
 import (
 	"fmt"
 	"github.com/go-redis/redis"
-	"github.com/z1px/framework/config"
+	"github.com/z1px/framework/conf"
 	"github.com/z1px/framework/logs"
 )
 
@@ -13,7 +13,7 @@ var Redis *redis.Client
 // 连接REDIS数据库
 func Connect() {
 	// 获取数据库配置
-	conf := config.BaseConf.Redis
+	conf := conf.Base.Redis
 
 	// 连接
 	client := redis.NewClient(&redis.Options{

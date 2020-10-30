@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
-	"github.com/z1px/framework/config"
+	"github.com/z1px/framework/conf"
 	"github.com/z1px/framework/logs"
 	"time"
 )
@@ -15,7 +15,7 @@ var DB *gorm.DB
 // 创建MYSQL数据库
 func CreateDatabase() {
 	// 获取数据库配置
-	conf := config.BaseConf.Mysql
+	conf := conf.Base.Mysql
 
 	// 连接数据库
 	db, err := gorm.Open(conf.Driver, fmt.Sprintf("%s:%s@(%s:%d)/%s?charset=%s&parseTime=True&loc=Local",
@@ -51,7 +51,7 @@ func CreateDatabase() {
 // 连接MYSQL数据库
 func Connect() {
 	// 获取数据库配置
-	conf := config.BaseConf.Mysql
+	conf := conf.Base.Mysql
 
 	// 连接数据库
 	db, err := gorm.Open(conf.Driver, fmt.Sprintf("%s:%s@(%s:%d)/%s?charset=%s&parseTime=True&loc=Local",

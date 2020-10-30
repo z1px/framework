@@ -2,7 +2,7 @@ package filepath
 
 import (
 	"fmt"
-	"github.com/z1px/framework/config/env"
+	"github.com/z1px/framework/conf/env"
 	"io/ioutil"
 	"os"
 	"path"

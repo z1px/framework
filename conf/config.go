@@ -1,8 +1,8 @@
-package config
+package conf
 
 import (
 	"github.com/BurntSushi/toml"
-	"github.com/z1px/framework/config/env"
+	"github.com/z1px/framework/conf/env"
 	"github.com/z1px/framework/util/filepath"
 	"gopkg.in/ini.v1"
 	"log"
@@ -47,8 +47,8 @@ type baseConf struct {
 }
 
 var (
-	BaseConf *baseConf // 基础配置
-	AppConf  *ini.File // 通用配置
+	Base *baseConf // 基础配置
+	App  *ini.File // 通用配置
 )
 
 // 初始化配置文件
@@ -69,7 +69,7 @@ func LoadTomlConf() {
 	filename := path.Join(confPath, "base.toml")
 	// 判断配置文件是否存在
 	if filepath.IsExist(filename) {
-		if _, err := toml.DecodeFile(filename, &BaseConf); err != nil {
+		if _, err := toml.DecodeFile(filename, &Base); err != nil {
 			// handle error
 			log.Fatalln(err)
 		}
@@ -79,14 +79,14 @@ func LoadTomlConf() {
 // 加载ENV基础配置
 func LoadEnvConf() {
 	// 服务配置
-	serverConf := &BaseConf.Server
+	serverConf := &Base.Server
 	serverConf.Name = env.GetString("APP_NAME", serverConf.Name)
 	serverConf.Mode = env.GetString("APP_MODE", serverConf.Mode)
 	serverConf.Host = env.GetString("APP_HOST", serverConf.Host)
 	serverConf.Port = env.GetInt("APP_PORT", serverConf.Port)
 
 	// mysql数据库配置
-	mysqlConf := &BaseConf.Mysql
+	mysqlConf := &Base.Mysql
 	mysqlConf.Driver = env.GetString("DB_DRIVER", mysqlConf.Driver)
 	mysqlConf.Host = env.GetString("DB_HOST", mysqlConf.Host)
 	mysqlConf.Port = env.GetInt("DB_PORT", mysqlConf.Port)
@@ -99,7 +99,7 @@ func LoadEnvConf() {
 	mysqlConf.Debug = env.GetBool("DB_DEBUG", mysqlConf.Debug)
 
 	// redis数据库配置
-	redisConf := &BaseConf.Redis
+	redisConf := &Base.Redis
 	redisConf.Host = env.GetString("REDIS_HOST", redisConf.Host)
 	redisConf.Port = env.GetInt("REDIS_PORT", redisConf.Port)
 	redisConf.Password = env.GetString("REDIS_PASSWORD", redisConf.Password)
@@ -119,13 +119,13 @@ func LoadIniConf() {
 			// handle error
 			log.Fatalln(err)
 		} else {
-			AppConf = cfg
+			App = cfg
 		}
 	}
 }
 
 // 获取运行模式
 func GetMode() (mode string) {
-	mode = BaseConf.Server.Mode
+	mode = Base.Server.Mode
 	return
 }
