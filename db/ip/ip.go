@@ -18,7 +18,7 @@ var (
 )
 
 // 初始化IP连接
-func Init() {
+func init() {
 	InitBaseStation()
 }
 

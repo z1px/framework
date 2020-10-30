@@ -10,10 +10,10 @@ import (
 // RedisClient Redis缓存客户端单例
 var Redis *redis.Client
 
-// Redis 在中间件中初始化redis连接
-func Init() {
+// 连接REDIS数据库
+func Connect() {
 	// 获取数据库配置
-	conf := config.DBConf.Redis
+	conf := config.BaseConf.Redis
 
 	// 连接
 	client := redis.NewClient(&redis.Options{

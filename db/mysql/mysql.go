@@ -12,10 +12,46 @@ import (
 // DB 数据库连接单例
 var DB *gorm.DB
 
-// 在中间件中初始化mysql连接
-func Init() {
+// 创建MYSQL数据库
+func CreateDatabase() {
 	// 获取数据库配置
-	conf := config.DBConf.Mysql
+	conf := config.BaseConf.Mysql
+
+	// 连接数据库
+	db, err := gorm.Open(conf.Driver, fmt.Sprintf("%s:%s@(%s:%d)/%s?charset=%s&parseTime=True&loc=Local",
+		conf.Username,
+		conf.Password,
+		conf.Host,
+		conf.Port,
+		"",
+		conf.Charset))
+	// Error
+	if err != nil {
+		// handle error
+		logs.ErrPrintf("mysql connect error：%v\n", err)
+	}
+	defer func() {
+		err := db.Close()
+		if err != nil {
+			logs.ErrPrintf("mysql close error：%v\n", err)
+		}
+	}()
+	if db.Error != nil {
+		logs.ErrPrintf("mysql error：%v\n", db.Error)
+	}
+	err = db.Exec(fmt.Sprintf("CREATE DATABASE IF NOT EXISTS `%s` DEFAULT CHARACTER SET `%s` DEFAULT COLLATE `%s`",
+		conf.Database,
+		conf.Charset,
+		conf.Collation)).Error
+	if err != nil {
+		logs.ErrPrintf("mysql created error：%v\n", err)
+	}
+}
+
+// 连接MYSQL数据库
+func Connect() {
+	// 获取数据库配置
+	conf := config.BaseConf.Mysql
 
 	// 连接数据库
 	db, err := gorm.Open(conf.Driver, fmt.Sprintf("%s:%s@(%s:%d)/%s?charset=%s&parseTime=True&loc=Local",

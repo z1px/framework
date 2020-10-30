@@ -10,7 +10,7 @@ import (
 
 // 判断是否是调试模式
 func IsDebug() bool {
-	return config.TomlConf.GetMode() == gin.DebugMode
+	return config.GetMode() == gin.DebugMode
 }
 
 // 格式化日志前缀
