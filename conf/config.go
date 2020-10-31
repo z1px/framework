@@ -9,10 +9,20 @@ import (
 	"path"
 )
 
-// 服务配置
-type serverConf struct {
+// app应用配置
+type appConf struct {
 	Name string `toml:"name"`
 	Mode string `toml:"mode"`
+}
+
+// http服务配置
+type httpConf struct {
+	Host string `toml:"host"`
+	Port int    `toml:"port"`
+}
+
+// websocket服务配置
+type websocketConf struct {
 	Host string `toml:"host"`
 	Port int    `toml:"port"`
 }
@@ -41,9 +51,11 @@ type redisConf struct {
 
 // 基础配置
 type baseConf struct {
-	Server serverConf `toml:"server"`
-	Mysql  mysqlConf  `toml:"mysql"`
-	Redis  redisConf  `toml:"redis"`
+	App       appConf       `toml:"app"`
+	Http      httpConf      `toml:"http"`
+	Websocket websocketConf `toml:"websocket"`
+	Mysql     mysqlConf     `toml:"mysql"`
+	Redis     redisConf     `toml:"redis"`
 }
 
 var (
@@ -78,12 +90,20 @@ func LoadTomlConf() {
 
 // 加载ENV基础配置
 func LoadEnvConf() {
-	// 服务配置
-	serverConf := &Base.Server
-	serverConf.Name = env.GetString("APP_NAME", serverConf.Name)
-	serverConf.Mode = env.GetString("APP_MODE", serverConf.Mode)
-	serverConf.Host = env.GetString("APP_HOST", serverConf.Host)
-	serverConf.Port = env.GetInt("APP_PORT", serverConf.Port)
+	// app应用配置
+	appConf := &Base.App
+	appConf.Name = env.GetString("APP_NAME", appConf.Name)
+	appConf.Mode = env.GetString("APP_MODE", appConf.Mode)
+
+	// http服务配置
+	httpConf := &Base.Http
+	httpConf.Host = env.GetString("HTTP_HOST", httpConf.Host)
+	httpConf.Port = env.GetInt("HTTP_PORT", httpConf.Port)
+
+	// websocket服务配置
+	websocketConf := &Base.Websocket
+	websocketConf.Host = env.GetString("WEBSOCKET_HOST", websocketConf.Host)
+	websocketConf.Port = env.GetInt("WEBSOCKET_PORT", websocketConf.Port)
 
 	// mysql数据库配置
 	mysqlConf := &Base.Mysql
@@ -126,6 +146,6 @@ func LoadIniConf() {
 
 // 获取运行模式
 func GetMode() (mode string) {
-	mode = Base.Server.Mode
+	mode = Base.App.Mode
 	return
 }

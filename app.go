@@ -50,9 +50,9 @@ func Init() (engine *gin.Engine) {
 func Run(engine *gin.Engine) {
 
 	// 监听地址
-	address := fmt.Sprintf("%s:%d", conf.Base.Server.Host, conf.Base.Server.Port)
+	address := fmt.Sprintf("%s:%d", conf.Base.Http.Host, conf.Base.Http.Port)
 
-	logs.Printf("listen：%s\n", address)
+	logs.Printf("listen http：%s\n", address)
 
 	// 自定义HTTP配置
 	server := &http.Server{

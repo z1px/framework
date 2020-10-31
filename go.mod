@@ -10,6 +10,7 @@ require (
 	github.com/go-playground/validator/v10 v10.4.1
 	github.com/go-redis/redis v6.15.9+incompatible
 	github.com/golang/protobuf v1.4.3 // indirect
+	github.com/gorilla/websocket v1.4.2 // indirect
 	github.com/ipipdotnet/ipdb-go v1.3.0
 	github.com/jinzhu/gorm v1.9.16
 	github.com/joho/godotenv v1.3.0
