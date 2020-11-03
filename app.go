@@ -1,4 +1,4 @@
-package app
+package framework
 
 import (
 	"fmt"
