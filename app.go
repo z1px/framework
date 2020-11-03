@@ -25,7 +25,7 @@ func init() {
 }
 
 // 初始化GIN
-func InitGin() (engine *gin.Engine) {
+func Init() (engine *gin.Engine) {
 
 	// 设置运行模式
 	gin.SetMode(conf.GetMode())
