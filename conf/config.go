@@ -64,7 +64,7 @@ var (
 )
 
 // 初始化配置文件
-func Init() {
+func init() {
 	// 加载TOML配置
 	LoadTomlConf()
 	// 加载ENV配置

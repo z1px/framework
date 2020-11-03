@@ -34,7 +34,7 @@ func GetLogPath() (logPath string, err error) {
 
 // 获取文件上传目录，不存在时创建
 func GetUploadPath() (UploadPath string, err error) {
-	UploadPath, err = CreatePathIfNotExist("static/upload")
+	UploadPath, err = CreatePathIfNotExist(env.GetString("UPLOAD_PATH", "static/upload"))
 	return
 }
 

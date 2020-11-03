@@ -15,16 +15,16 @@ var DB *gorm.DB
 // 创建MYSQL数据库
 func CreateDatabase() {
 	// 获取数据库配置
-	conf := conf.Base.Mysql
+	mysqlConf := conf.Base.Mysql
 
 	// 连接数据库
-	db, err := gorm.Open(conf.Driver, fmt.Sprintf("%s:%s@(%s:%d)/%s?charset=%s&parseTime=True&loc=Local",
-		conf.Username,
-		conf.Password,
-		conf.Host,
-		conf.Port,
+	db, err := gorm.Open(mysqlConf.Driver, fmt.Sprintf("%s:%s@(%s:%d)/%s?charset=%s&parseTime=True&loc=Local",
+		mysqlConf.Username,
+		mysqlConf.Password,
+		mysqlConf.Host,
+		mysqlConf.Port,
 		"",
-		conf.Charset))
+		mysqlConf.Charset))
 	// Error
 	if err != nil {
 		// handle error
@@ -40,9 +40,9 @@ func CreateDatabase() {
 		logs.ErrPrintf("mysql error：%v\n", db.Error)
 	}
 	err = db.Exec(fmt.Sprintf("CREATE DATABASE IF NOT EXISTS `%s` DEFAULT CHARACTER SET `%s` DEFAULT COLLATE `%s`",
-		conf.Database,
-		conf.Charset,
-		conf.Collation)).Error
+		mysqlConf.Database,
+		mysqlConf.Charset,
+		mysqlConf.Collation)).Error
 	if err != nil {
 		logs.ErrPrintf("mysql created error：%v\n", err)
 	}
@@ -51,16 +51,16 @@ func CreateDatabase() {
 // 连接MYSQL数据库
 func Connect() {
 	// 获取数据库配置
-	conf := conf.Base.Mysql
+	mysqlConf := conf.Base.Mysql
 
 	// 连接数据库
-	db, err := gorm.Open(conf.Driver, fmt.Sprintf("%s:%s@(%s:%d)/%s?charset=%s&parseTime=True&loc=Local",
-		conf.Username,
-		conf.Password,
-		conf.Host,
-		conf.Port,
-		conf.Database,
-		conf.Charset))
+	db, err := gorm.Open(mysqlConf.Driver, fmt.Sprintf("%s:%s@(%s:%d)/%s?charset=%s&parseTime=True&loc=Local",
+		mysqlConf.Username,
+		mysqlConf.Password,
+		mysqlConf.Host,
+		mysqlConf.Port,
+		mysqlConf.Database,
+		mysqlConf.Charset))
 	// Error
 	if err != nil {
 		// handle error
@@ -70,13 +70,13 @@ func Connect() {
 		logs.ErrPrintf("mysql error：%v\n", db.Error)
 	}
 	// 设置输出数据库日志
-	db.LogMode(conf.Debug)
+	db.LogMode(mysqlConf.Debug)
 	db.SetLogger(gorm.Logger{LogWriter: NewLog()})
 	// 全局禁用表名复数
 	db.SingularTable(true) // 如果设置为true,`User`的默认表名为`user`,使用`TableName`设置的表名不受影响
 	// 更改默认表名，设置数据库表前缀
 	gorm.DefaultTableNameHandler = func(db *gorm.DB, defaultTableName string) (tableName string) {
-		tableName = conf.Prefix + defaultTableName
+		tableName = mysqlConf.Prefix + defaultTableName
 		return
 	}
 	// 设置连接池

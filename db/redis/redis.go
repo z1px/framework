@@ -13,13 +13,13 @@ var Redis *redis.Client
 // 连接REDIS数据库
 func Connect() {
 	// 获取数据库配置
-	conf := conf.Base.Redis
+	redisConf := conf.Base.Redis
 
 	// 连接
 	client := redis.NewClient(&redis.Options{
-		Addr:       fmt.Sprintf("%s:%d", conf.Host, conf.Port),
-		Password:   "",
-		DB:         conf.Db,
+		Addr:       fmt.Sprintf("%s:%d", redisConf.Host, redisConf.Port),
+		Password:   redisConf.Password,
+		DB:         redisConf.Db,
 		MaxRetries: 1,
 	})
 

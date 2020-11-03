@@ -1,4 +1,4 @@
-package framework
+package app
 
 import (
 	"fmt"
@@ -14,10 +14,18 @@ import (
 	"time"
 )
 
-// 初始化
-func Init() (engine *gin.Engine) {
-	// 初始化配置文件
-	conf.Init()
+// 初始化配置
+func init() {
+
+	// 初始化MYSQL数据库连接
+	mysql.Connect()
+
+	// 初始化REDIS数据库连接
+	redis.Connect()
+}
+
+// 初始化GIN
+func InitGin() (engine *gin.Engine) {
 
 	// 设置运行模式
 	gin.SetMode(conf.GetMode())
@@ -32,13 +40,6 @@ func Init() (engine *gin.Engine) {
 	engine.Use(gin.Recovery(), middleware.Recover())
 	// 崩溃恢复中间件
 	engine.Use()
-
-	// 初始化MYSQL数据库连接
-	mysql.CreateDatabase()
-	mysql.Connect()
-
-	// 初始化REDIS数据库连接
-	redis.Connect()
 
 	// 初始化路由
 	router.Init(engine)
