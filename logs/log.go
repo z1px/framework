@@ -16,7 +16,7 @@ func IsDebug() bool {
 // 格式化日志前缀
 func FormatPrefix() (prefix string) {
 	prefix = fmt.Sprintf(
-		"[%d-%02d-%02d %02d:%02d:%02d]  ",
+		"%d-%02d-%02d %02d:%02d:%02d",
 		time.Now().Year(),
 		time.Now().Month(),
 		time.Now().Day(),
@@ -27,37 +27,37 @@ func FormatPrefix() (prefix string) {
 }
 
 // 打印日志前缀
-func PrintPrefix() {
-	_, err := fmt.Fprint(gin.DefaultWriter, FormatPrefix())
+func PrintPrefix(level string) {
+	_, err := fmt.Fprintf(gin.DefaultWriter, "%s【%s】", FormatPrefix(), level)
 	if err != nil {
 		fmt.Println(err)
 	}
 }
 
 // 打印错误日志前缀
-func PrintErrPrefix() {
-	_, err := fmt.Fprint(gin.DefaultErrorWriter, FormatPrefix())
+func PrintErrPrefix(level string) {
+	_, err := fmt.Fprintf(gin.DefaultErrorWriter, "%s【%s】", FormatPrefix(), level)
 	if err != nil {
 		fmt.Println(err)
 	}
 }
 
 func Println(a ...interface{}) {
-	PrintPrefix()
+	PrintPrefix("info")
 	if _, err := fmt.Fprintln(gin.DefaultWriter, a...); err != nil {
 		fmt.Println(err)
 	}
 }
 
 func Print(a ...interface{}) {
-	PrintPrefix()
+	PrintPrefix("info")
 	if _, err := fmt.Fprint(gin.DefaultWriter, a...); err != nil {
 		fmt.Println(err)
 	}
 }
 
 func Printf(format string, a ...interface{}) {
-	PrintPrefix()
+	PrintPrefix("info")
 	if _, err := fmt.Fprintf(gin.DefaultWriter, format, a...); err != nil {
 		fmt.Println(err)
 	}
@@ -65,45 +65,54 @@ func Printf(format string, a ...interface{}) {
 
 func DebugPrintln(a ...interface{}) {
 	if IsDebug() {
-		Println(a...)
+		PrintPrefix("debug")
+		if _, err := fmt.Fprintln(gin.DefaultWriter, a...); err != nil {
+			fmt.Println(err)
+		}
 	}
 }
 
 func DebugPrint(a ...interface{}) {
 	if IsDebug() {
-		Print(a...)
+		PrintPrefix("debug")
+		if _, err := fmt.Fprint(gin.DefaultWriter, a...); err != nil {
+			fmt.Println(err)
+		}
 	}
 }
 
 func DebugPrintf(format string, a ...interface{}) {
 	if IsDebug() {
-		Printf(format, a...)
+		PrintPrefix("debug")
+		if _, err := fmt.Fprintf(gin.DefaultWriter, format, a...); err != nil {
+			fmt.Println(err)
+		}
 	}
 }
 
 func ErrPrintln(a ...interface{}) {
-	PrintErrPrefix()
+	PrintErrPrefix("error")
 	if _, err := fmt.Fprintln(gin.DefaultErrorWriter, a...); err != nil {
 		fmt.Println(err)
 	}
 }
 
 func ErrPrint(a ...interface{}) {
-	PrintErrPrefix()
+	PrintErrPrefix("error")
 	if _, err := fmt.Fprint(gin.DefaultErrorWriter, a...); err != nil {
 		fmt.Println(err)
 	}
 }
 
 func ErrPrintf(format string, a ...interface{}) {
-	PrintErrPrefix()
+	PrintErrPrefix("error")
 	if _, err := fmt.Fprintf(gin.DefaultErrorWriter, format, a...); err != nil {
 		fmt.Println(err)
 	}
 }
 
 func Fatalln(a ...interface{}) {
-	PrintErrPrefix()
+	PrintErrPrefix("fatal")
 	if _, err := fmt.Fprintln(gin.DefaultErrorWriter, a...); err != nil {
 		fmt.Println(err)
 	}
@@ -111,7 +120,7 @@ func Fatalln(a ...interface{}) {
 }
 
 func Fatal(a ...interface{}) {
-	PrintErrPrefix()
+	PrintErrPrefix("fatal")
 	if _, err := fmt.Fprint(gin.DefaultErrorWriter, a...); err != nil {
 		fmt.Println(err)
 	}
@@ -119,7 +128,7 @@ func Fatal(a ...interface{}) {
 }
 
 func Fatalf(format string, a ...interface{}) {
-	PrintErrPrefix()
+	PrintErrPrefix("fatal")
 	if _, err := fmt.Fprintf(gin.DefaultErrorWriter, format, a...); err != nil {
 		fmt.Println(err)
 	}
